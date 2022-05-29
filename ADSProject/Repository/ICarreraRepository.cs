@@ -1,14 +1,14 @@
-﻿using ADSProyect.Models;
+﻿using ADSProject.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ADSProyect.Repository
+namespace ADSProject.Repository
 {
-     public interface ICarreraRepository
+    public interface ICarreraRepository
     {
-        List<CarreraViewModel> obtenerCarreras();
+        List<CarreraViewModel> obtenerCarrera();
 
         int agregarCarrera(CarreraViewModel carreraViewModel);
 

@@ -1,30 +1,30 @@
-﻿using ADSProject.Utils;
-using ADSProyect.Models;
-using ADSProyect.Repository;
+﻿
+using ADSProject.Models;
+using ADSProject.Utils;
+using ADSProject.Repository;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ADSProyect.Controllers
+namespace ADSProject.Controllers
 {
     public class ProfesorController : Controller
     {
         private readonly IProfesorRepository profesorRepository;
+
         public ProfesorController(IProfesorRepository profesorRepository)
         {
             this.profesorRepository = profesorRepository;
         }
 
-
         [HttpGet]
         public IActionResult Index()
         {
-             try
+            try
             {
-                var item =profesorRepository.obtenerProfesores();
-
+                var item = profesorRepository.obtenerProfesor();
                 return View(item);
             }
             catch (Exception)
@@ -33,23 +33,19 @@ namespace ADSProyect.Controllers
                 throw;
             }
         }
-
         [HttpGet]
-        public IActionResult Form(int? idProfesor, Operaciones operaciones)
+
+        public IActionResult Form (int? idProfesor, Operaciones operaciones)
         {
             try
             {
-                var profesor = new ProfesoresViewModel();
-
-                if (idProfesor.HasValue)
+                var profesor = new ProfesorViewModel();
+                if(idProfesor.HasValue)
                 {
                     profesor = profesorRepository.obtenerProfesorPorID(idProfesor.Value);
                 }
-                // Indica el tipo de operacion que es esta realizando
                 ViewData["Operaciones"] = operaciones;
-
                 return View(profesor);
-
             }
             catch (Exception)
             {
@@ -57,22 +53,20 @@ namespace ADSProyect.Controllers
                 throw;
             }
         }
-
         [HttpPost]
-        public IActionResult Form(ProfesoresViewModel profesoresViewModel)
+
+        public IActionResult Form (ProfesorViewModel profesorViewModel)
         {
             try
             {
-                if (profesoresViewModel.idProfesor == 0) // En caso de insertar
+                if (profesorViewModel.idProfesor == 0)
                 {
-                    profesorRepository.agregarProfesor(profesoresViewModel);
+                    profesorRepository.agregarProfesor(profesorViewModel);
                 }
-                else // En caso de actualizar
+                else
                 {
-                    profesorRepository.actualizarProfesor
-                        (profesoresViewModel.idProfesor, profesoresViewModel);
+                    profesorRepository.actualizarProfesor(profesorViewModel.idProfesor, profesorViewModel);
                 }
-
                 return RedirectToAction("Index");
             }
             catch (Exception)
@@ -81,7 +75,6 @@ namespace ADSProyect.Controllers
                 throw;
             }
         }
-
         [HttpPost]
         public IActionResult Delete(int idProfesor)
         {

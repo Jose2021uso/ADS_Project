@@ -1,24 +1,21 @@
-﻿using ADSProyect.Models;
+﻿using ADSProject.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ADSProyect.Repository
+namespace ADSProject.Repository
 {
     public interface IProfesorRepository
     {
+        List<ProfesorViewModel> obtenerProfesor();
 
-        List<ProfesoresViewModel> obtenerProfesores();
+        int agregarProfesor(ProfesorViewModel profesorViewModel);
 
-        int agregarProfesor(ProfesoresViewModel profesoresViewModel);
-
-        int actualizarProfesor(int idProfesor, ProfesoresViewModel profesoresViewModel);
+        int actualizarProfesor(int idProfesor, ProfesorViewModel profesorViewModel);
 
         bool eliminarProfesor(int idProfesor);
 
-        ProfesoresViewModel obtenerProfesorPorID(int idProfesor);
-
-
+        ProfesorViewModel obtenerProfesorPorID(int idProfesor);
     }
 }

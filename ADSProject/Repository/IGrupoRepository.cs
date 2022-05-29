@@ -1,20 +1,23 @@
-﻿using ADSProyect.Models;
+﻿using ADSProject.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ADSProyect.Repository
+namespace ADSProject.Repository
 {
     public interface IGrupoRepository
     {
-        List<GruposViewModel> obtenerGrupos();
-        int agregarGrupo(GruposViewModel gruposViewModel);
+        List<GrupoViewModel> obtenerGrupos();
 
-        int actualizarGrupo(int idGrupo, GruposViewModel gruposViewModel);
+        List<GrupoViewModel> obtenerGrupos(String[] includes);
+
+        int agregarGrupo(GrupoViewModel grupoViewModel);
+
+        int actualizarGrupo(int idGrupo, GrupoViewModel grupoViewModel);
 
         bool eliminarGrupo(int idGrupo);
 
-        GruposViewModel obtenerGruposPorID(int idGrupo);
+        GrupoViewModel obtenerGrupoPorID(int idGrupo);
     }
 }

@@ -1,9 +1,10 @@
 ﻿@model IEnumerable<ADSProject.Models.MateriaViewModel>
 @using ADSProject.Utils
 
-@{ ViewData["Title"] = "Index";
-    Layout = "~/Views/Shared/_Layout.cshtml"; }
-
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
 
 <div class="container">
     <div class="col-sm-12">
@@ -20,49 +21,55 @@
     <div class="col-sm-12">
         @if (Model.Count() > 0)
         {
-<table class="table table-bordered table-striped">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.idmateria)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.nombreMateria)
-            </th>
-
-            <th>Acciones</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.idMateria)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.nombreMateria)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.idCarrera)
+                        </th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.idMateria)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.nombreMateria)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Carreras.NombreCarrera)
+                        </td>
+                        <td>
+                            <a class="btn btn-primary"
+                               asp-route-idMateria="@item.idMateria"
+                               asp-action="Form"
+                               asp-route-operaciones="@Operaciones.modificar">Modificar</a>
+                            <a class="btn btn-warning"
+                               asp-route-idMateria="@item.idMateria"
+                               asp-action="Form"
+                               asp-route-operaciones="@Operaciones.leer">Leer</a>
+                            <a class="btn btn-danger eliminar"
+                               asp-route-idMateria="@item.idMateria"
+                               asp-action="Delete">Eliminar</a>
+                        </td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
         {
-<tr>
-    <td>
-        @Html.DisplayFor(modelItem => item.idmateria)
-    </td>
-    <td>
-        @Html.DisplayFor(modelItem => item.nombreMateria)
-    </td>
-
-    <td>
-        <a class="btn btn-primary"
-           asp-route-idMateria="@item.idmateria"
-           asp-action="Form"
-           asp-route-operaciones="@Operaciones.modificar">Modificar</a>
-        <a class="btn btn-warning"
-           asp-route-idMateria="@item.idmateria"
-           asp-action="Form"
-           asp-route-operaciones="@Operaciones.leer">Leer</a>
-        <a class="btn btn-danger eliminar"
-           asp-route-idMateria="@item.idmateria"
-           asp-action="Delete">Eliminar</a>
-    </td>
-</tr>}
-    </tbody>
-</table> }
-else
-{
-<h3 class="text-center">Lista vacia.</h3>}
+            <h3 class="text-center">Lista vacia.</h3>
+        }
     </div>
 </div>
-

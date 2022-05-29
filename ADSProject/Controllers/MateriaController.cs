@@ -12,18 +12,20 @@ namespace ADSProject.Controllers
     public class MateriaController : Controller
     {
         private readonly IMateriaRepository materiaRepository;
+        private readonly ICarreraRepository carreraRepository;
 
-        public MateriaController(IMateriaRepository materiaRepository)
+        public MateriaController(IMateriaRepository materiaRepository, ICarreraRepository carreraRepository)
         {
             this.materiaRepository = materiaRepository;
+            this.carreraRepository = carreraRepository;
         }
+
         [HttpGet]
         public IActionResult Index()
         {
             try
             {
-                var item = materiaRepository.obtenerMaterias();
-
+                var item = materiaRepository.obtenerMateria(new String[] { "Carreras" });
                 return View(item);
             }
             catch (Exception)
@@ -31,26 +33,24 @@ namespace ADSProject.Controllers
 
                 throw;
             }
-            
         }
-
-
         [HttpGet]
-        public IActionResult Form(int? idMateria, Operaciones operaciones)
+        public IActionResult Form (int? idMateria, Operaciones operaciones)
         {
             try
             {
                 var materia = new MateriaViewModel();
-
-                if (idMateria.HasValue)
+                if(idMateria.HasValue)
                 {
-                    materia = materiaRepository.obtenerMateriaPorID(idMateria.Value);
+                    materia = materiaRepository.ObtenerMateriaPorID(idMateria.Value);
+                    
                 }
-                // Indica el tipo de operacion que es esta realizando
                 ViewData["Operaciones"] = operaciones;
 
-                return View(materia);
+                // obteniendo todas las carreras disponibles
+                ViewBag.Carreras = carreraRepository.obtenerCarrera();
 
+                return View(materia);
             }
             catch (Exception)
             {
@@ -58,20 +58,19 @@ namespace ADSProject.Controllers
                 throw;
             }
         }
-
         [HttpPost]
         public IActionResult Form(MateriaViewModel materiaViewModel)
         {
             try
             {
-                if (materiaViewModel.idmateria == 0) // En caso de insertar
+                if (materiaViewModel.idMateria == 0) // En caso de insertar
                 {
-                    materiaRepository.agregarMaterias(materiaViewModel);
+                    materiaRepository.agregarMateria(materiaViewModel);
                 }
                 else // En caso de actualizar
                 {
                     materiaRepository.actualizarMateria
-                        (materiaViewModel.idmateria, materiaViewModel);
+                        (materiaViewModel.idMateria, materiaViewModel);
                 }
 
                 return RedirectToAction("Index");
@@ -82,7 +81,6 @@ namespace ADSProject.Controllers
                 throw;
             }
         }
-
         [HttpPost]
         public IActionResult Delete(int idMateria)
         {

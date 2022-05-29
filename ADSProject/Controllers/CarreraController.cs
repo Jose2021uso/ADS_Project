@@ -1,13 +1,13 @@
-﻿using ADSProject.Utils;
-using ADSProyect.Models;
-using ADSProyect.Repository;
+﻿using ADSProject.Models;
+using ADSProject.Repository;
+using ADSProject.Utils;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ADSProyect.Controllers
+namespace ADSProject.Controllers
 {
     public class CarreraController : Controller
     {
@@ -15,7 +15,7 @@ namespace ADSProyect.Controllers
 
         public CarreraController(ICarreraRepository carreraRepository)
         {
-            this.carreraRepository = carreraRepository; 
+            this.carreraRepository = carreraRepository;
         }
 
         [HttpGet]
@@ -23,8 +23,7 @@ namespace ADSProyect.Controllers
         {
             try
             {
-                var item = carreraRepository.obtenerCarreras();
-
+                var item = carreraRepository.obtenerCarrera();
                 return View(item);
             }
             catch (Exception)
@@ -33,23 +32,20 @@ namespace ADSProyect.Controllers
                 throw;
             }
         }
-
         [HttpGet]
         public IActionResult Form(int? idCarrera, Operaciones operaciones)
         {
             try
             {
                 var carrera = new CarreraViewModel();
-
                 if (idCarrera.HasValue)
                 {
                     carrera = carreraRepository.obtenerCarreraPorID(idCarrera.Value);
+
                 }
                 // Indica el tipo de operacion que es esta realizando
                 ViewData["Operaciones"] = operaciones;
-
                 return View(carrera);
-
             }
             catch (Exception)
             {
@@ -57,7 +53,6 @@ namespace ADSProyect.Controllers
                 throw;
             }
         }
-
         [HttpPost]
         public IActionResult Form(CarreraViewModel carreraViewModel)
         {
@@ -69,10 +64,8 @@ namespace ADSProyect.Controllers
                 }
                 else // En caso de actualizar
                 {
-                    carreraRepository.actualizarCarrera
-                        (carreraViewModel.idCarrera, carreraViewModel);
+                    carreraRepository.actualizarCarrera(carreraViewModel.idCarrera, carreraViewModel);
                 }
-
                 return RedirectToAction("Index");
             }
             catch (Exception)
@@ -81,7 +74,6 @@ namespace ADSProyect.Controllers
                 throw;
             }
         }
-
         [HttpPost]
         public IActionResult Delete(int idCarrera)
         {
@@ -94,9 +86,7 @@ namespace ADSProyect.Controllers
 
                 throw;
             }
-
             return RedirectToAction("Index");
         }
     }
 }
-

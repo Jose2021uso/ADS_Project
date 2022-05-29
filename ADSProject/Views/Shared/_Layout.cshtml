@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -24,6 +24,7 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         <li class="dropdown">
+
                             <a class="btn dropdown-toggle" data-toggle="dropdown"
                                role="button" id="dropDownMenuButton" aria-expanded="false" aria-haspopup="true">
                                 Mantenimientos<span class="caret"></span>
@@ -60,6 +61,7 @@
     <script src="~/js/jquery.loadingModal.min.js" asp-append-version="true"></script>
     <script src="~/js/sweetalert2.all.min.js" asp-append-version="true"></script>
     <script src="~/js/sweetalert2.min.js" asp-append-version="true"></script>
+
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

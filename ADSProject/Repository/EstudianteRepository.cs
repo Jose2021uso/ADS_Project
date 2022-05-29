@@ -1,5 +1,6 @@
-﻿using ADSProject.Models;
-using ADSProyect.Data;
+﻿using ADSProject.Data;
+using ADSProject.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,12 +16,11 @@ namespace ADSProject.Repository
 
         public EstudianteRepository(ApplicationDbContext applicationDbContext)
         {
-            /*  lstEstudiantes = new List<EstudianteViewModel>
-              {
-                  new EstudianteViewModel{ idEstudiante = 1, nombresEstudiante = "Juan", apellidosEstudiante = "Perez",
-                      codigoEstudiante = "PG16I04002", correoEstudiante = "Juan@usonsonate.edu.sv"}
-              }; */
-
+            /*lstEstudiantes = new List<EstudianteViewModel>
+            {
+                new EstudianteViewModel{ idEstudiante = 1, nombresEstudiante = "Juan", apellidosEstudiante = "Perez",
+                    codigoEstudiante = "PG16I0400221", correoEstudiante = "Juan@usonsonate.edu.sv"}
+            };*/
             this.applicationDbContext = applicationDbContext;
         }
 
@@ -36,7 +36,7 @@ namespace ADSProject.Repository
                     estudianteViewModel.idEstudiante = 1;
                 }
                 lstEstudiantes.Add(estudianteViewModel);
-                return estudianteViewModel.idEstudiante; */
+                return estudianteViewModel.idEstudiante;*/
 
                 applicationDbContext.Estudiantes.Add(estudianteViewModel);
                 applicationDbContext.SaveChanges();
@@ -55,9 +55,9 @@ namespace ADSProject.Repository
             try
             {
                 //lstEstudiantes[lstEstudiantes.FindIndex(x => x.idEstudiante == idEstudiante)] = estudianteViewModel;
-
                 var item = applicationDbContext.Estudiantes.SingleOrDefault(x => x.idEstudiante == idEstudiante);
 
+                
                 applicationDbContext.Entry(item).CurrentValues.SetValues(estudianteViewModel);
 
                 applicationDbContext.SaveChanges();
@@ -76,20 +76,16 @@ namespace ADSProject.Repository
             try
             {
                 //lstEstudiantes.RemoveAt(lstEstudiantes.FindIndex(x => x.idEstudiante == idEstudiante));
-
                 var item = applicationDbContext.Estudiantes.SingleOrDefault(x => x.idEstudiante == idEstudiante);
 
                 //Borrar registro por completo
-                /*applicationDbContext.Estudiantes.Remove(item);*/
+                //applicationDbContext.Estudiantes.Remove(item);
 
                 item.estado = false;
-
                 applicationDbContext.Attach(item);
 
                 applicationDbContext.Entry(item).Property(x => x.estado).IsModified = true;
-
                 applicationDbContext.SaveChanges();
-
                 return true;
             }
             catch (Exception)
@@ -105,7 +101,6 @@ namespace ADSProject.Repository
             {
                 //var item = lstEstudiantes.Find(x => x.idEstudiante == idEstudiante);
                 var item = applicationDbContext.Estudiantes.SingleOrDefault(x => x.idEstudiante == idEstudiante);
-
                 return item;
             }
             catch (Exception)
@@ -119,11 +114,32 @@ namespace ADSProject.Repository
         {
             try
             {
-                // Obtener todos los estudiantes sin filtro
-                // return applicationDbContext.Estudiantes.ToList();
+                //Obtener todos los estudiantes sin filtro
+                //return applicationDbContext.Estudiantes.ToList();
 
-                // Obtener todos los estudiantes con filtro(estado = 1)
+                //Obtener todos los estudiantes sin filtro (estado =1)
                 return applicationDbContext.Estudiantes.Where(x => x.estado == true).ToList();
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        public List<EstudianteViewModel> obtenerEstudiantes(String[] includes)
+        {
+            try
+            {
+                // Se obtiene el listado de estudiantes donde la propiedad estado sea verdadero. (es decir que esten habilitados)
+                var lst = applicationDbContext.Estudiantes.Where(x => x.estado == true).AsQueryable();
+
+                foreach (var item in includes)
+                {
+                    lst = lst.Include(item);
+                }
+
+                return lst.ToList();
             }
             catch (Exception)
             {

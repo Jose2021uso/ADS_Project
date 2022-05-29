@@ -1,30 +1,37 @@
-﻿using ADSProject.Utils;
-using ADSProyect.Models;
-using ADSProyect.Repository;
+﻿using ADSProject.Models;
+using ADSProject.Repository;
+using ADSProject.Utils;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ADSProyect.Controllers
+namespace ADSProject.Controllers
 {
     public class GrupoController : Controller
     {
         private readonly IGrupoRepository grupoRepository;
+        private readonly ICarreraRepository carreraRepository;
+        private readonly IMateriaRepository materiaRepository;
+        private readonly IProfesorRepository profesorRepository;
 
-        public GrupoController(IGrupoRepository grupoRepository)
+        public GrupoController(IGrupoRepository grupoRepository, ICarreraRepository carreraRepository,IMateriaRepository materiaRepository ,IProfesorRepository profesorRepository)
         {
             this.grupoRepository = grupoRepository;
+            this.carreraRepository = carreraRepository;
+            this.materiaRepository = materiaRepository;
+            this.profesorRepository = profesorRepository;
         }
+
+      
 
         [HttpGet]
         public IActionResult Index()
         {
             try
             {
-                var item = grupoRepository.obtenerGrupos();
-
+                var item = grupoRepository.obtenerGrupos(new String[] { "Carreras" , "Profesores", "Materias"});
                 return View(item);
             }
             catch (Exception)
@@ -34,21 +41,27 @@ namespace ADSProyect.Controllers
             }
         }
 
+
+
         [HttpGet]
         public IActionResult Form(int? idGrupo, Operaciones operaciones)
         {
             try
             {
-                var Grupo = new GruposViewModel();
+                var grupo = new GrupoViewModel();
 
                 if (idGrupo.HasValue)
                 {
-                    Grupo = grupoRepository.obtenerGruposPorID(idGrupo.Value);
+                    grupo = grupoRepository.obtenerGrupoPorID(idGrupo.Value);
                 }
                 // Indica el tipo de operacion que es esta realizando
                 ViewData["Operaciones"] = operaciones;
 
-                return View(Grupo);
+                // obteniendo todas las carreras disponibles
+                ViewBag.Carreras = carreraRepository.obtenerCarrera();
+                ViewBag.Materias = materiaRepository.obtenerMateria();
+                ViewBag.Profesor = profesorRepository.obtenerProfesor();
+                return View(grupo);
 
             }
             catch (Exception)
@@ -59,20 +72,19 @@ namespace ADSProyect.Controllers
         }
 
         [HttpPost]
-        public IActionResult Form(GruposViewModel gruposViewModel)
+        public IActionResult Form(GrupoViewModel grupoViewModel)
         {
             try
             {
-                if (gruposViewModel.idGrupo == 0) // En caso de insertar
+                if (grupoViewModel.idGrupo == 0) // En caso de insertar
                 {
-                    grupoRepository.agregarGrupo(gruposViewModel);
+                    grupoRepository.agregarGrupo(grupoViewModel);
                 }
                 else // En caso de actualizar
                 {
-                    grupoRepository.actualizarGrupo
-                        (gruposViewModel.idGrupo, gruposViewModel);
-                }
+                    grupoRepository.actualizarGrupo(grupoViewModel.idGrupo, grupoViewModel);
 
+                }
                 return RedirectToAction("Index");
             }
             catch (Exception)
@@ -82,7 +94,7 @@ namespace ADSProyect.Controllers
             }
         }
 
-        [HttpPost]
+        [HttpPost] // se cambió a Post para eliminar el registro
         public IActionResult Delete(int idGrupo)
         {
             try

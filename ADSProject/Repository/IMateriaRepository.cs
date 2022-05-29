@@ -8,14 +8,16 @@ namespace ADSProject.Repository
 {
     public interface IMateriaRepository
     {
-        List<MateriaViewModel> obtenerMaterias();
+        List<MateriaViewModel> obtenerMateria();
 
-        int agregarMaterias(MateriaViewModel materiaViewModel);
+        List<MateriaViewModel> obtenerMateria(String[] includes);
+
+        int agregarMateria(MateriaViewModel materiaViewModel);
 
         int actualizarMateria(int idMateria, MateriaViewModel materiaViewModel);
 
         bool eliminarMateria(int idMateria);
 
-        MateriaViewModel obtenerMateriaPorID(int idMateria);
+        MateriaViewModel ObtenerMateriaPorID(int idMateria);
     }
 }

@@ -12,10 +12,12 @@ namespace ADSProject.Controllers
     public class EstudianteController : Controller
     {
         private readonly IEstudianteRepository estudianteRepository;
+        private readonly ICarreraRepository carreraRepository;
 
-        public EstudianteController(IEstudianteRepository estudianteRepository)
+        public EstudianteController(IEstudianteRepository estudianteRepository, ICarreraRepository carreraRepository)
         {
             this.estudianteRepository = estudianteRepository;
+            this.carreraRepository = carreraRepository;
         }
 
         [HttpGet]
@@ -23,8 +25,7 @@ namespace ADSProject.Controllers
         {
             try
             {
-                var item = estudianteRepository.obtenerEstudiantes();
-
+                var item = estudianteRepository.obtenerEstudiantes(new String[] { "Carreras" });
                 return View(item);
             }
             catch (Exception)
@@ -48,6 +49,9 @@ namespace ADSProject.Controllers
                 }
                 // Indica el tipo de operacion que es esta realizando
                 ViewData["Operaciones"] = operaciones;
+
+                // obteniendo todas las carreras disponibles
+                ViewBag.Carreras = carreraRepository.obtenerCarrera();
 
                 return View(estudiante);
 
@@ -82,7 +86,7 @@ namespace ADSProject.Controllers
             }
         }
 
-        [HttpPost]
+        [HttpPost] // se cambió a Post para eliminar el registro
         public IActionResult Delete(int idEstudiante)
         {
             try
