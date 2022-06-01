@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ADSProject.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220529003934_RelacionProfesoresGrupos")]
-    partial class RelacionProfesoresGrupos
+    [Migration("20220527222141_RelacionMateriaGrupo")]
+    partial class RelacionMateriaGrupo
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

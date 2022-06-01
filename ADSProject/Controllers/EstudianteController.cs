@@ -1,7 +1,9 @@
 ﻿using ADSProject.Models;
 using ADSProject.Repository;
 using ADSProject.Utils;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,11 +15,13 @@ namespace ADSProject.Controllers
     {
         private readonly IEstudianteRepository estudianteRepository;
         private readonly ICarreraRepository carreraRepository;
+        private readonly ILogger<EstudianteController> logger;
 
-        public EstudianteController(IEstudianteRepository estudianteRepository, ICarreraRepository carreraRepository)
+        public EstudianteController(IEstudianteRepository estudianteRepository, ICarreraRepository carreraRepository, ILogger<EstudianteController> logger)
         {
             this.estudianteRepository = estudianteRepository;
             this.carreraRepository = carreraRepository;
+            this.logger = logger;
         }
 
         [HttpGet]
@@ -28,9 +32,9 @@ namespace ADSProject.Controllers
                 var item = estudianteRepository.obtenerEstudiantes(new String[] { "Carreras" });
                 return View(item);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
+                logger.LogError("Error en el metodo index del controlador estidiante", ex.Message);
                 throw;
             }
            
@@ -64,20 +68,40 @@ namespace ADSProject.Controllers
         }
 
         [HttpPost]
+        [AutoValidateAntiforgeryToken]
         public IActionResult Form(EstudianteViewModel estudianteViewModel)
         {
             try
             {
-                if(estudianteViewModel.idEstudiante == 0) // En caso de insertar
+                //Se valida que el modelo de datos sea correcto
+                if (ModelState.IsValid)
                 {
-                    estudianteRepository.agregarEstudiante(estudianteViewModel);
-                } else // En caso de actualizar
-                {
-                    estudianteRepository.actualizarEstudiante
-                        (estudianteViewModel.idEstudiante, estudianteViewModel);
-                }
+                    //Almacena el Id del registro insertado.
+                    int id = 0;
+                    if (estudianteViewModel.idEstudiante == 0) // En caso de insertar
+                    {
+                        id = estudianteRepository.agregarEstudiante(estudianteViewModel);
+                    }
+                    else // En caso de actualizar
+                    {
+                        id = estudianteRepository.actualizarEstudiante
+                            (estudianteViewModel.idEstudiante, estudianteViewModel);
+                    }
 
-                return RedirectToAction("Index");
+                    if (id>0)
+                    {
+                        return StatusCode(StatusCodes.Status200OK);
+                    }
+                    else
+                    {
+                        return StatusCode(StatusCodes.Status202Accepted);
+                    }
+                }
+                else
+                {
+                    return StatusCode(StatusCodes.Status400BadRequest);
+                }
+                
             }
             catch (Exception)
             {

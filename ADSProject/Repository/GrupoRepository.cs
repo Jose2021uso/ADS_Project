@@ -145,5 +145,29 @@ namespace ADSProject.Repository
                 throw;
             }
         }
+
+        // Obtener grupo filtrado
+        public GrupoViewModel obtenerGrupoPorID(int idGrupo, string[] includes)
+        {
+            try
+            {
+                var lst = applicationDbContext.Grupos.Where(x => x.estado == true).AsQueryable();
+
+                if (includes != null && includes.Count() > 0)
+                {
+                    foreach (var item in includes)
+                    {
+                        lst = lst.Include(item);
+                    }
+                }
+
+                return lst.SingleOrDefault(x => x.idGrupo == idGrupo);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
     }
 }

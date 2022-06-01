@@ -2,7 +2,7 @@
 
 namespace ADSProject.Migrations
 {
-    public partial class RelacionProfesoresGrupos : Migration
+    public partial class RelacionMateriaGrupo : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -22,7 +22,7 @@ namespace ADSProject.Migrations
                 column: "idMateria",
                 principalTable: "Materias",
                 principalColumn: "idMateria",
-                onDelete: ReferentialAction.Cascade);
+                onDelete: ReferentialAction.NoAction);
 
             migrationBuilder.AddForeignKey(
                 name: "FK_Grupos_Profesores_idProfesor",
@@ -30,7 +30,7 @@ namespace ADSProject.Migrations
                 column: "idProfesor",
                 principalTable: "Profesores",
                 principalColumn: "idProfesor",
-                onDelete: ReferentialAction.Cascade);
+                onDelete: ReferentialAction.NoAction);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

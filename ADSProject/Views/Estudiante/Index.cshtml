@@ -68,17 +68,19 @@
                             @Html.DisplayFor(modelItem => item.Carreras.NombreCarrera)
                         </td>
                         <td>
-                            <a class="btn btn-primary"
-                               asp-route-idEstudiante="@item.idEstudiante"
-                               asp-action="Form"
-                               asp-route-operaciones="@Operaciones.modificar">Modificar</a>
-                            <a class="btn btn-warning"
-                               asp-route-idEstudiante="@item.idEstudiante"
-                               asp-action="Form"
-                               asp-route-operaciones="@Operaciones.leer">Leer</a>
-                            <a class="btn btn-danger eliminar"
-                               asp-route-idEstudiante="@item.idEstudiante"
-                               asp-action="Delete">Eliminar</a>
+                            <div class="btn-group">
+                                <a class="btn btn-primary mr-2"
+                                   asp-route-idEstudiante="@item.idEstudiante"
+                                   asp-action="Form"
+                                   asp-route-operaciones="@Operaciones.modificar">Modificar</a>
+                                <a class="btn btn-warning"
+                                   asp-route-idEstudiante="@item.idEstudiante"
+                                   asp-action="Form"
+                                   asp-route-operaciones="@Operaciones.leer">Leer</a>
+                                <a class="btn btn-danger eliminar ml-2"
+                                   asp-route-idEstudiante="@item.idEstudiante"
+                                   asp-action="Delete">Eliminar</a>
+                            </div>
                         </td>
                     </tr>
                     }
